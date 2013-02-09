@@ -1,0 +1,60 @@
+<!doctype html>
+<html data-ng-app="issueApp">
+<head>
+	<title>Issues per milestone</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.min.css" rel="stylesheet" media="screen">
+	<style type="text/css">
+      body {
+        padding-top: 20px;
+        padding-bottom: 20px;
+      }
+      .sidebar-nav {
+        padding: 9px 0;
+      }
+	  span.label {
+		margin-right: 4px;
+	  }
+	</style>
+</head>
+<body>
+<div class="container-fluid" data-ng-controller="MainController">
+	<div class="row-fluid">
+		<div class="span2">
+			<div class="well nav-header">
+				<ul class="nav nav-list">
+					<li class="sidebar-header">Milestones</li>
+					<li data-ng-repeat="(ms, list) in perMilestone" data-ng-class="{active:currentMs==ms}" data-ng-click="$parent.currentMs=ms"><a href="#">{{ms}}</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="span10">
+			<p class="label label-important" data-ng-show="error">{{error}}</p>
+			<p><b>Repository</b>: <a data-ng-href="https://github.com/{{meta.repo.owner}}">{{meta.repo.owner}}</a> / <a data-ng-href="https://github.com/{{meta.repo.owner}}/{{meta.repo.name}}">{{meta.repo.name}}</a>
+			<p><b>Label filter</b>: {{meta.filter}}</p>
+			<p><b>Issues updated</b>: {{updated}}</p>
+			<h2>Milestone: {{currentMs}}</h2>
+			<table class="table table-condensed">
+				<tr>
+					<th>Title</th>
+					<th>Body</th>
+					<th>Labels</th>
+				</tr>
+				<tr data-ng-repeat="issue in currentIssues">
+					<td><a data-ng-href="{{issue.html_url}}">{{issue.title}}</a></td>
+					<td data-ng-bind-html-unsafe="issue.body | markdown"></td>
+					<td>
+						<span class="label" data-ng-repeat="label in issue.labels" data-ng-style="{'background-color':'#'+label.color}">{{label.name}}</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+<script src="markdown.js"></script>
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.1/angular.min.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
